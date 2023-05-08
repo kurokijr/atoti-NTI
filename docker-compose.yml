@@ -1,0 +1,10 @@
+version: '0.3'
+services:
+  api:
+    build: .
+    container_name: PCAnalisys-atoti
+    environment:
+      PORT: 9000
+    ports:
+      - '9000:9000'
+    restart:  "no"
