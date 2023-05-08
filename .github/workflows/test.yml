@@ -1,0 +1,16 @@
+name: Test
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup
+      - run: poetry run app format --check
+      - run: poetry run app lint --check
+      - run: poetry run app typecheck
+      - run: poetry run app test

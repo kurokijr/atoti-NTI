@@ -1,0 +1,85 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+atoti = {extras = ["sql"], version = "*"}
+pandas = "*"
+pydantic = "*"
+python = ">=3.9"
+requests = "*"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+colorama = "*"
+docker = "*"
+mypy = "*"
+pandas-stubs = "*"
+pytest = "*"
+pytest-xdist = "*"
+ruff = "*"
+tomli = "*"
+typer = "*"
+types-requests = "*"
+
+[tool.poetry.scripts]
+app = "cli:app"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+strict = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_calls = false
+
+[[tool.mypy.overrides]]
+module = ["docker", "docker.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+filterwarnings = ["error"]
+
+[tool.ruff]
+ignore = [
+  # The type checkers can infer the following `ANN` rules.
+  "ANN101",
+  "ANN102",
+  "COM812", # Covered by Black.
+  "E501", # Covered by Black.
+  "E741", # `l` is used for level (consistency with `h` for hierarchy and `m` for measure).
+  "EM101", # Not worth the annoyance.
+  "EM102", # Not worth the annoyance.
+  # The following `D` rules are unnecessary.
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D106",
+  "D107",
+  "D203",
+  "D213",
+  "F403", # Useful to reexport all public symbols from an imported modules in an `__init__.py`.
+  "PLC0414", # redundant imports are used for re-exporting (See https://peps.python.org/pep-0484/#stub-files).
+  "PT004", # Useless distinction.
+  "S101", # `assert` is useful when used correctly (https://realpython.com/python-assert-statement).
+  "TCH", # Circular dependencies of any kind must be avoided.
+  "TRY003", # Not worth the annoyance.
+]
+select = ["ALL"]
+target-version = "py39"
+unfixable = [
+  "ERA001", # To prevent deleting code commented while debugging.
+]
+
+[tool.ruff.isort]
+combine-as-imports = true
+required-imports = ["from __future__ import annotations"]
