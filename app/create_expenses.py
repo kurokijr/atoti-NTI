@@ -34,6 +34,7 @@ def create_expenses_table(session: tt.Session, /) -> None:
         p = row.Projeto
         r = row.Rubrica
         v = row.Valor_apresentado
+        s = row.Status
         std = 0
         std = 0.0 if math.isnan(dict_std.get((p, r))) else dict_std.get((p, r))
         mean = dict_avg.get((p, r))
@@ -46,7 +47,7 @@ def create_expenses_table(session: tt.Session, /) -> None:
         ratio_vs_std_h.append(str(tier))
         ratio_vs_std_m.append(tier)
 
-        if row["Status"] in target_status:
+        if s in target_status:
             valor_analisado.append(v)
         else:
             valor_analisado.append(0)
