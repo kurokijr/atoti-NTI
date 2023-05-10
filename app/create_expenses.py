@@ -71,3 +71,5 @@ def create_expenses_table(session: tt.Session, /) -> None:
         l["Complementar_3"],
         l["Situacao_Parecer"]
     ]
+
+    m["Valor_apresentado.LONG"] = tt.agg.long(expenses_table["Valor_apresentado"])
