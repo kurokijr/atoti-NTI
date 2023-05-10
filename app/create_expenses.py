@@ -61,9 +61,3 @@ def create_expenses_table(session: tt.Session, /) -> None:
         l["Complementar_3"],
         l["Situacao_Parecer"]
     ]
-
-    del l["Inicial"]
-    del l["Complementar_1"]
-    del l["Complementar_2"]
-    del l["Complementar_3"]
-    del l["Situacao_Parecer"]
