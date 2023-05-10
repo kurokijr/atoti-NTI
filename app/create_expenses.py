@@ -26,6 +26,9 @@ def create_expenses_table(session: tt.Session, /) -> None:
 
     ratio_vs_std_h: list[str] = []
     ratio_vs_std_m:list[float] = []
+    valor_analisado:list[float] = []
+
+    target_status:list[str] = ["Aceito", "Aceito parcialmente", "Rejeitado"]
 
     for row in df.itertuples():
         p = row.Projeto
@@ -43,8 +46,14 @@ def create_expenses_table(session: tt.Session, /) -> None:
         ratio_vs_std_h.append(str(tier))
         ratio_vs_std_m.append(tier)
 
+        if row["Status"] in target_status:
+            valor_analisado.append(v)
+        else:
+            valor_analisado.append(0)
+
     df["Ratio_VS_STD_h"] = ratio_vs_std_h
     df["Ratio_VS_STD_m"] = ratio_vs_std_m
+    df["Valor_analizado"] = valor_analisado
 
     df["unit_count"] = 1
 
