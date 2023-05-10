@@ -54,7 +54,7 @@ def create_expenses_table(session: tt.Session, /) -> None:
 
     df["Ratio_VS_STD_h"] = ratio_vs_std_h
     df["Ratio_VS_STD_m"] = ratio_vs_std_m
-    df["Valor_analizado"] = valor_analisado
+    df["Valor_analisado"] = valor_analisado
 
     df["unit_count"] = 1
 
