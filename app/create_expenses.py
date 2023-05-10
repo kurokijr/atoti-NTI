@@ -24,7 +24,8 @@ def create_expenses_table(session: tt.Session, /) -> None:
     averages = df.groupby(["Projeto","Rubrica"])["Valor_apresentado"].mean()
     dict_avg = averages.to_dict()
 
-    ratio_vs_std: list[str] = []
+    ratio_vs_std_h: list[str] = []
+    ratio_vs_std_m:list[float] = []
 
     for row in df.itertuples():
         p = row.Projeto
@@ -39,9 +40,11 @@ def create_expenses_table(session: tt.Session, /) -> None:
             tier = round_off_rating(target)
         else:
             tier = 0
-        ratio_vs_std.append(str(tier))
+        ratio_vs_std_h.append(str(tier))
+        ratio_vs_std_m.append(tier)
 
-    df["Ratio_VS_STD"] = ratio_vs_std
+    df["Ratio_VS_STD_h"] = ratio_vs_std_h
+    df["Ratio_VS_STD_m"] = ratio_vs_std_m
 
     df["unit_count"] = 1
 
@@ -58,3 +61,9 @@ def create_expenses_table(session: tt.Session, /) -> None:
         l["Complementar_3"],
         l["Situacao_Parecer"]
     ]
+
+    del l["Inicial"]
+    del l["Complementar_1"]
+    del l["Complementar_2"]
+    del l["Complementar_3"]
+    del l["Situacao_Parecer"]
