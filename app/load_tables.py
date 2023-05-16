@@ -7,12 +7,11 @@ from typing import Any, cast
 
 import atoti as tt
 import pandas as pd
-from pydantic import HttpUrl
 
 from .config import Config
 from .constants import StationDetailsTableColumn, StationStatusTableColumn, Table
-from .util import read_json, reverse_geocode
 
+def read_ue_unit()
 
 def read_station_details(
     *,
