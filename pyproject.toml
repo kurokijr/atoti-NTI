@@ -10,7 +10,7 @@ pandas = "*"
 pydantic = "*"
 python = ">=3.9"
 requests = "*"
-sqlalchemy = "*"
+sqlalchemy = ">=2.0.8"
 
 [tool.poetry.dev-dependencies]
 black = "*"
