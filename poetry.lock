@@ -613,6 +613,14 @@ files = [
 numpy = ">=1.16.6"
 
 [[package]]
+name = "sqlalchemy"
+version = "2.0.8"
+description = "SQL connection"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+
+[[package]]
 name = "pydantic"
 version = "1.10.7"
 description = "Data validation and settings management using python type hints"
