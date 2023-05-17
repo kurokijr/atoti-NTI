@@ -4,54 +4,80 @@ from enum import Enum
 
 
 class Table(Enum):
-    STATION_DETAILS = "Station details"
-    STATION_STATUS = "Station status"
+    UE_UNIT = "Unidade Embrapii"
+    PROJECT_PROJECT_UE = "Projeto VS UE"
+    PROJECT_PROJECT = "Descrição do projeto"
+    PROJECT_CONTRACT = "Contrato do projeto"
+    PROJECT_FINANCING_MODALITY = "Modalidade de financiamento do projeto"
 
 
-class StationDetailsTableColumn(Enum):
+class UEUnitTableColumn(Enum):
     ID = "ID"
-    NAME = "Name"
-    DEPARTMENT = "Department"
-    CITY = "City"
-    POSTCODE = "Postcode"
-    STREET = "Street"
-    HOUSE_NUMBER = "House number"
-    CAPACITY = "Capacity"
+    NAME = "Nome"
 
+class ProjectProjectUETableColumn(Enum):
+    ID = "ID"
+    PROJECT_ID = "ID Projeto"
+    UNIT_ID = "ID Unidade"
 
-class StationStatusTableColumn(Enum):
-    STATION_ID = "Station ID"
-    BIKE_TYPE = "Bike type"
-    BIKES = "Bikes"
+class ProjectProjectTableColumn(Enum):
+    ID = "ID"
+    CODE = "Codigo"
+    PROJECT_TYPE = "Tipo Projeto"
+    FINAL_MATURITY_LEVEL = "Nivel final de maturidade"
+    STATUS = "Status"
 
+class ProjectFinancingModalityColumn(Enum):
+    ID = "ID"
+    MODEL = "Modelo de financiamento"
+    ALIAS = "Alias do modelo de financiamento"
+    DESCRIPTION = "Descrição da modalidade"
+
+class ProjectContractTableColumn(Enum):
+    ID = "ID"
+    CONTRACT_DATE = "Data da contratação do projeto"
+    START_DATE = "Data de início do projeto"
+    FINISH_DATE = "Data de finalização do projeto"
+    DEFINED_MATURITY_LEVEL = "Nível de maturidade"
+    EMBRAPII_AMOUNT = "Investimento Embrapii"
+    COMPANY_AMOUNT = "Investimento Empresa"
+    UE_AMOUNT = "Investimento UE"
+    TOTAL_AMOUNT = "Investimento total"
+    PROJECT_RELATED_ID = "Projeto relacionado"
+    FINANCING_MODALITY = "Modalidade de financiamento"
+    FINAL_MATURITY_LEVEL = "Maturidade final"
 
 class Cube(Enum):
-    STATION = "Station"
+    PROJECT = "Projeto"
 
 
-class StationCubeHierarchy(Enum):
-    BIKE_TYPE = StationStatusTableColumn.BIKE_TYPE.value
-    LOCATION = "Location"
-    STATION = "Station"
+class ProjectCubeHierarchy(Enum):
+    UNIT = UEUnitTableColumn.NAME.value
+    MODALITY = ProjectFinancingModalityColumn.MODEL.value
+    PROJECT_TYPE = ProjectProjectTableColumn.PROJECT_TYPE.value
+    MATURITY = "Maturity"
+    TIMELINE = "Timeline"
 
+class ProjectCubeUnitLevel(Enum):
+    UNIT = UEUnitTableColumn.NAME.value
 
-class StationCubeBikeTypeLevel(Enum):
-    BIKE_TYPE = StationCubeHierarchy.BIKE_TYPE.value
+class ProjectCubeModalityLevel(Enum):
+    MODALITY = ProjectFinancingModalityColumn.MODEL.value
 
+class ProjectCubeProjectTypeLevel(Enum):
+    PROJECT_TYPE = ProjectProjectTableColumn.PROJECT_TYPE.value
 
-class StationCubeLocationLevel(Enum):
-    DEPARTMENT = StationDetailsTableColumn.DEPARTMENT.value
-    CITY = StationDetailsTableColumn.CITY.value
-    POSTCODE = StationDetailsTableColumn.POSTCODE.value
-    STREET = StationDetailsTableColumn.STREET.value
-    HOUSE_NUMBER = StationDetailsTableColumn.HOUSE_NUMBER.value
+class ProjectCubeMaturityLevel(Enum):
+    PROJECT_FINAL_MATURITY_LEVEL = ProjectProjectTableColumn.FINAL_MATURITY_LEVEL.value
+    CONTRACT_FINAL_MATURITY_LEVEL = ProjectContractTableColumn.FINAL_MATURITY_LEVEL.value
+    CONTRACT_DEFINED_MATURITY_LEVEL = ProjectContractTableColumn.DEFINED_MATURITY_LEVEL.value
 
+class ProjectCubeTimelineLevel(Enum):
+    CONTRACT_DATE = ProjectContractTableColumn.CONTRACT_DATE.value
+    START_DATE = ProjectContractTableColumn.START_DATE.value
+    FINISH_DATE = ProjectContractTableColumn.FINISH_DATE.value
 
-class StationCubeStationLevel(Enum):
-    NAME = StationDetailsTableColumn.NAME.value
-    ID = StationDetailsTableColumn.ID.value
-
-
-class StationCubeMeasure(Enum):
-    CAPACITY = StationDetailsTableColumn.CAPACITY.value
-    BIKES = StationStatusTableColumn.BIKES.value
+class ProjectCubeMeasure(Enum):
+    EMBRAPII_AMOUNT = ProjectContractTableColumn.EMBRAPII_AMOUNT.value
+    COMPANY_AMOUNT = ProjectContractTableColumn.COMPANY_AMOUNT.value
+    UE_AMOUNT = ProjectContractTableColumn.UE_AMOUNT.value

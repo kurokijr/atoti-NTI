@@ -4,73 +4,87 @@ import atoti as tt
 
 from .constants import (
     Cube,
-    StationCubeBikeTypeLevel,
-    StationCubeHierarchy,
-    StationCubeLocationLevel,
-    StationCubeMeasure,
-    StationCubeStationLevel,
-    StationDetailsTableColumn,
-    StationStatusTableColumn,
+    ProjectContractTableColumn,
+    ProjectCubeHierarchy,
+    ProjectCubeMaturityLevel,
+    ProjectCubeMeasure,
+    ProjectCubeModalityLevel,
+    ProjectCubeProjectTypeLevel,
+    ProjectCubeTimelineLevel,
+    ProjectCubeUnitLevel,
+    ProjectFinancingModalityColumn,
+    ProjectProjectTableColumn,
     Table,
+    UEUnitTableColumn,
 )
 
 
-def create_station_cube(session: tt.Session, /) -> None:
-    station_details_table = session.tables[Table.STATION_DETAILS.value]
-    station_status_table = session.tables[Table.STATION_STATUS.value]
+def create_project_cube(session: tt.Session, /) -> None:
+    ue_unit_table = session.tables[Table.UE_UNIT.value]
+    project_contract_table = session.tables[Table.PROJECT_CONTRACT.value]
+    session.tables[Table.PROJECT_PROJECT_UE.value]
+    project_project_table = session.tables[Table.PROJECT_PROJECT.value]
+    session.tables[Table.PROJECT_CONTRACT.value]
+    project_financing_modality = session.tables[Table.PROJECT_FINANCING_MODALITY.value]
 
-    cube = session.create_cube(station_status_table, Cube.STATION.value, mode="manual")
+    cube = session.create_cube(project_project_table, Cube.PROJECT.value, mode="manual")
     h, l, m = cube.hierarchies, cube.levels, cube.measures
 
     h.update(
         {
-            StationCubeHierarchy.BIKE_TYPE.value: {
-                StationCubeBikeTypeLevel.BIKE_TYPE.value: station_status_table[
-                    StationStatusTableColumn.BIKE_TYPE.value
+            ProjectCubeHierarchy.UNIT.value: {
+                ProjectCubeUnitLevel.UNIT.value: ue_unit_table[
+                    UEUnitTableColumn.NAME.value
                 ]
             },
-            StationCubeHierarchy.LOCATION.value: {
-                StationCubeLocationLevel.DEPARTMENT.value: station_details_table[
-                    StationDetailsTableColumn.DEPARTMENT.value
-                ],
-                StationCubeLocationLevel.CITY.value: station_details_table[
-                    StationDetailsTableColumn.CITY.value
-                ],
-                StationCubeLocationLevel.POSTCODE.value: station_details_table[
-                    StationDetailsTableColumn.POSTCODE.value
-                ],
-                StationCubeLocationLevel.STREET.value: station_details_table[
-                    StationDetailsTableColumn.STREET.value
-                ],
-                StationCubeLocationLevel.HOUSE_NUMBER.value: station_details_table[
-                    StationDetailsTableColumn.HOUSE_NUMBER.value
-                ],
+            ProjectCubeHierarchy.MODALITY.value: {
+                ProjectCubeModalityLevel.MODALITY.value: project_financing_modality[
+                    ProjectFinancingModalityColumn.MODEL.value
+                ]
             },
-            StationCubeHierarchy.STATION.value: {
-                StationCubeStationLevel.NAME.value: station_details_table[
-                    StationDetailsTableColumn.NAME.value
-                ],
-                StationCubeStationLevel.ID.value: station_status_table[
-                    StationStatusTableColumn.STATION_ID.value
-                ],
+            ProjectCubeHierarchy.PROJECT_TYPE.value: {
+                ProjectCubeProjectTypeLevel.PROJECT_TYPE.value: project_project_table[
+                    ProjectProjectTableColumn.PROJECT_TYPE.value
+                ]
             },
+            ProjectCubeHierarchy.MATURITY.value: {
+                ProjectCubeMaturityLevel.CONTRACT_DEFINED_MATURITY_LEVEL.value: project_contract_table[
+                    ProjectContractTableColumn.DEFINED_MATURITY_LEVEL.value
+                ],
+                ProjectCubeMaturityLevel.PROJECT_FINAL_MATURITY_LEVEL.value: project_project_table[
+                    ProjectProjectTableColumn.FINAL_MATURITY_LEVEL.value
+                ],
+                ProjectCubeMaturityLevel.CONTRACT_FINAL_MATURITY_LEVEL.value: project_contract_table[
+                    ProjectContractTableColumn.FINAL_MATURITY_LEVEL.value
+                ]
+            },
+            ProjectCubeHierarchy.TIMELINE.value: {
+                ProjectCubeTimelineLevel.CONTRACT_DATE.value: project_contract_table[
+                    ProjectContractTableColumn.CONTRACT_DATE.value
+                ],
+                ProjectCubeTimelineLevel.START_DATE.value: project_contract_table[
+                    ProjectContractTableColumn.START_DATE.value
+                ],
+                ProjectCubeTimelineLevel.FINISH_DATE.value: project_contract_table[
+                    ProjectContractTableColumn.FINISH_DATE.value
+                ]
+            }
         }
     )
 
     m.update(
         {
-            StationCubeMeasure.BIKES.value: tt.agg.sum(
-                station_status_table[StationStatusTableColumn.BIKES.value]
+            ProjectCubeMeasure.EMBRAPII_AMOUNT.value: tt.agg.sum(
+                project_contract_table[ProjectContractTableColumn.EMBRAPII_AMOUNT.value]
             ),
-            StationCubeMeasure.CAPACITY.value: tt.agg.sum(
-                tt.agg.single_value(
-                    station_details_table[StationDetailsTableColumn.CAPACITY.value]
-                ),
-                scope=tt.OriginScope(l[StationCubeStationLevel.ID.value]),
+            ProjectCubeMeasure.COMPANY_AMOUNT.value: tt.agg.sum(
+                project_contract_table[ProjectContractTableColumn.COMPANY_AMOUNT.value]
             ),
+            ProjectCubeMeasure.UE_AMOUNT.value: tt.agg.sum(
+                project_contract_table[ProjectContractTableColumn.UE_AMOUNT.value]
+            )
         }
     )
 
-
 def create_cubes(session: tt.Session, /) -> None:
-    create_station_cube(session)
+    create_project_cube(session)

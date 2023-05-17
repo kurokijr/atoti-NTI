@@ -26,15 +26,11 @@ def create_expenses_table(session: tt.Session, /) -> None:
 
     ratio_vs_std_h: list[str] = []
     ratio_vs_std_m:list[float] = []
-    valor_analisado:list[float] = []
-
-    target_status:list[str] = ["Aceito", "Aceito parcialmente", "Rejeitado"]
 
     for row in df.itertuples():
         p = row.Projeto
         r = row.Rubrica
         v = row.Valor_apresentado
-        s = row.Status
         std = 0
         std = 0.0 if math.isnan(dict_std.get((p, r))) else dict_std.get((p, r))
         mean = dict_avg.get((p, r))
@@ -47,14 +43,8 @@ def create_expenses_table(session: tt.Session, /) -> None:
         ratio_vs_std_h.append(str(tier))
         ratio_vs_std_m.append(tier)
 
-        if s in target_status:
-            valor_analisado.append(v)
-        else:
-            valor_analisado.append(0)
-
     df["Ratio_VS_STD_h"] = ratio_vs_std_h
     df["Ratio_VS_STD_m"] = ratio_vs_std_m
-    df["Valor_analisado"] = valor_analisado
 
     df["unit_count"] = 1
 
@@ -72,5 +62,8 @@ def create_expenses_table(session: tt.Session, /) -> None:
         l["Situacao_Parecer"]
     ]
 
-    m["Valor_apresentado.LONG"] = tt.agg.long(expenses_table["Valor_apresentado"])
-    m["Valor_analisado.LONG"] = tt.agg.long(expenses_table["Valor_analisado"])
+    del l["Inicial"]
+    del l["Complementar_1"]
+    del l["Complementar_2"]
+    del l["Complementar_3"]
+    del l["Situacao_Parecer"]
